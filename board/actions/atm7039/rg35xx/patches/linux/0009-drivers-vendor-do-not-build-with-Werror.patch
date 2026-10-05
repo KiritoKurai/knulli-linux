@@ -1,0 +1,459 @@
+From: Gerard Torres <meganace07@gmail.com>
+Subject: [PATCH] drivers: don't build vendor GPU/Wi-Fi drivers with -Werror
+
+The PowerVR SGX (pvrsrvkm) and Actions Wi-Fi drivers force -Werror.
+Newer GCC adds warnings (stringop-truncation, attributes, ...) on this
+old vendor code, which then breaks the build of the GPU module.
+
+diff --git a/drivers/gpu/pvr/eurasia_km/Makefile b/drivers/gpu/pvr/eurasia_km/Makefile
+index 28bc448b..f92ba736 100755
+--- a/drivers/gpu/pvr/eurasia_km/Makefile
++++ b/drivers/gpu/pvr/eurasia_km/Makefile
+@@ -120,38 +120,38 @@ OBJS += \
+ endif
+ 
+ ifneq ($(W),1)
+-CFLAGS_osfunc.o := -Werror
+-CFLAGS_mutils.o := -Werror
+-CFLAGS_mmap.o := -Werror
+-CFLAGS_module.o := -Werror
+-CFLAGS_pdump.o := -Werror
+-CFLAGS_proc.o := -Werror
+-CFLAGS_pvr_bridge_k.o := -Werror
+-CFLAGS_pvr_debug.o := -Werror
+-CFLAGS_mm.o := -Werror
+-CFLAGS_mutex.o := -Werror
+-CFLAGS_event.o := -Werror
+-CFLAGS_osperproc.o := -Werror
+-CFLAGS_buffer_manager.o := -Werror
+-CFLAGS_devicemem.o := -Werror
+-CFLAGS_deviceclass.o := -Werror
+-CFLAGS_handle.o := -Werror
+-CFLAGS_hash.o := -Werror
+-CFLAGS_metrics.o := -Werror
+-CFLAGS_pvrsrv.o := -Werror
+-CFLAGS_queue.o := -Werror
+-CFLAGS_ra.o := -Werror
+-CFLAGS_resman.o := -Werror
+-CFLAGS_power.o := -Werror
+-CFLAGS_mem.o := -Werror
+-CFLAGS_pdump_common.o := -Werror
+-CFLAGS_bridged_support.o := -Werror
+-CFLAGS_bridged_pvr_bridge.o := -Werror
+-CFLAGS_perproc.o := -Werror
+-CFLAGS_lists.o := -Werror
+-CFLAGS_mem_debug.o := -Werror
+-CFLAGS_osfunc_common.o := -Werror
+-CFLAGS_refcount.o := -Werror
++CFLAGS_osfunc.o := 
++CFLAGS_mutils.o := 
++CFLAGS_mmap.o := 
++CFLAGS_module.o := 
++CFLAGS_pdump.o := 
++CFLAGS_proc.o := 
++CFLAGS_pvr_bridge_k.o := 
++CFLAGS_pvr_debug.o := 
++CFLAGS_mm.o := 
++CFLAGS_mutex.o := 
++CFLAGS_event.o := 
++CFLAGS_osperproc.o := 
++CFLAGS_buffer_manager.o := 
++CFLAGS_devicemem.o := 
++CFLAGS_deviceclass.o := 
++CFLAGS_handle.o := 
++CFLAGS_hash.o := 
++CFLAGS_metrics.o := 
++CFLAGS_pvrsrv.o := 
++CFLAGS_queue.o := 
++CFLAGS_ra.o := 
++CFLAGS_resman.o := 
++CFLAGS_power.o := 
++CFLAGS_mem.o := 
++CFLAGS_pdump_common.o := 
++CFLAGS_bridged_support.o := 
++CFLAGS_bridged_pvr_bridge.o := 
++CFLAGS_perproc.o := 
++CFLAGS_lists.o := 
++CFLAGS_mem_debug.o := 
++CFLAGS_osfunc_common.o := 
++CFLAGS_refcount.o := 
+ endif
+ 
+ # SUPPORT_SGX==1 only
+@@ -168,15 +168,15 @@ OBJS += \
+ 	services4/srvkm/devices/sgx/pb.o
+ 
+ ifneq ($(W),1)
+-CFLAGS_bridged_sgx_bridge.o := -Werror
+-CFLAGS_sgxinit.o := -Werror
+-CFLAGS_sgxpower.o := -Werror
+-CFLAGS_sgxreset.o := -Werror
+-CFLAGS_sgxutils.o := -Werror
+-CFLAGS_sgxkick.o := -Werror
+-CFLAGS_sgxtransfer.o := -Werror
+-CFLAGS_mmu.o := -Werror
+-CFLAGS_pb.o := -Werror
++CFLAGS_bridged_sgx_bridge.o := 
++CFLAGS_sgxinit.o := 
++CFLAGS_sgxpower.o := 
++CFLAGS_sgxreset.o := 
++CFLAGS_sgxutils.o := 
++CFLAGS_sgxkick.o := 
++CFLAGS_sgxtransfer.o := 
++CFLAGS_mmu.o := 
++CFLAGS_pb.o := 
+ endif
+ 
+ ifeq ($(SUPPORT_DRI_DRM),1)
+diff --git a/drivers/gpu/pvr/eurasia_km/services4/srvkm/env/linux/Kbuild.mk b/drivers/gpu/pvr/eurasia_km/services4/srvkm/env/linux/Kbuild.mk
+index 6d0efad6..2d86148e 100755
+--- a/drivers/gpu/pvr/eurasia_km/services4/srvkm/env/linux/Kbuild.mk
++++ b/drivers/gpu/pvr/eurasia_km/services4/srvkm/env/linux/Kbuild.mk
+@@ -102,38 +102,38 @@ pvrsrvkm-y += \
+ endif
+ 
+ ifneq ($(W),1)
+-CFLAGS_osfunc.o := -Werror
+-CFLAGS_mutils.o := -Werror
+-CFLAGS_mmap.o := -Werror
+-CFLAGS_module.o := -Werror
+-CFLAGS_pdump.o := -Werror
+-CFLAGS_proc.o := -Werror
+-CFLAGS_pvr_bridge_k.o := -Werror
+-CFLAGS_pvr_debug.o := -Werror
+-CFLAGS_mm.o := -Werror
+-CFLAGS_mutex.o := -Werror
+-CFLAGS_event.o := -Werror
+-CFLAGS_osperproc.o := -Werror
+-CFLAGS_buffer_manager.o := -Werror
+-CFLAGS_devicemem.o := -Werror
+-CFLAGS_deviceclass.o := -Werror
+-CFLAGS_handle.o := -Werror
+-CFLAGS_hash.o := -Werror
+-CFLAGS_metrics.o := -Werror
+-CFLAGS_pvrsrv.o := -Werror
+-CFLAGS_queue.o := -Werror
+-CFLAGS_ra.o := -Werror
+-CFLAGS_resman.o := -Werror
+-CFLAGS_power.o := -Werror
+-CFLAGS_mem.o := -Werror
+-CFLAGS_pdump_common.o := -Werror
+-CFLAGS_bridged_support.o := -Werror
+-CFLAGS_bridged_pvr_bridge.o := -Werror
+-CFLAGS_perproc.o := -Werror
+-CFLAGS_lists.o := -Werror
+-CFLAGS_mem_debug.o := -Werror
+-CFLAGS_osfunc_common.o := -Werror
+-CFLAGS_refcount.o := -Werror
++CFLAGS_osfunc.o := 
++CFLAGS_mutils.o := 
++CFLAGS_mmap.o := 
++CFLAGS_module.o := 
++CFLAGS_pdump.o := 
++CFLAGS_proc.o := 
++CFLAGS_pvr_bridge_k.o := 
++CFLAGS_pvr_debug.o := 
++CFLAGS_mm.o := 
++CFLAGS_mutex.o := 
++CFLAGS_event.o := 
++CFLAGS_osperproc.o := 
++CFLAGS_buffer_manager.o := 
++CFLAGS_devicemem.o := 
++CFLAGS_deviceclass.o := 
++CFLAGS_handle.o := 
++CFLAGS_hash.o := 
++CFLAGS_metrics.o := 
++CFLAGS_pvrsrv.o := 
++CFLAGS_queue.o := 
++CFLAGS_ra.o := 
++CFLAGS_resman.o := 
++CFLAGS_power.o := 
++CFLAGS_mem.o := 
++CFLAGS_pdump_common.o := 
++CFLAGS_bridged_support.o := 
++CFLAGS_bridged_pvr_bridge.o := 
++CFLAGS_perproc.o := 
++CFLAGS_lists.o := 
++CFLAGS_mem_debug.o := 
++CFLAGS_osfunc_common.o := 
++CFLAGS_refcount.o := 
+ endif
+ 
+ # SUPPORT_SGX==1 only
+@@ -150,15 +150,15 @@ pvrsrvkm-y += \
+ 	services4/srvkm/devices/sgx/pb.o
+ 
+ ifneq ($(W),1)
+-CFLAGS_bridged_sgx_bridge.o := -Werror
+-CFLAGS_sgxinit.o := -Werror
+-CFLAGS_sgxpower.o := -Werror
+-CFLAGS_sgxreset.o := -Werror
+-CFLAGS_sgxutils.o := -Werror
+-CFLAGS_sgxkick.o := -Werror
+-CFLAGS_sgxtransfer.o := -Werror
+-CFLAGS_mmu.o := -Werror
+-CFLAGS_pb.o := -Werror
++CFLAGS_bridged_sgx_bridge.o := 
++CFLAGS_sgxinit.o := 
++CFLAGS_sgxpower.o := 
++CFLAGS_sgxreset.o := 
++CFLAGS_sgxutils.o := 
++CFLAGS_sgxkick.o := 
++CFLAGS_sgxtransfer.o := 
++CFLAGS_mmu.o := 
++CFLAGS_pb.o := 
+ endif
+ 
+ ifeq ($(SUPPORT_DRI_DRM),1)
+diff --git a/drivers/gpu/pvr/eurasia_km_linux/Makefile b/drivers/gpu/pvr/eurasia_km_linux/Makefile
+index 1b5f1678..67fa5f98 100755
+--- a/drivers/gpu/pvr/eurasia_km_linux/Makefile
++++ b/drivers/gpu/pvr/eurasia_km_linux/Makefile
+@@ -125,38 +125,38 @@ OBJS += \
+ endif
+ 
+ ifneq ($(W),1)
+-CFLAGS_osfunc.o := -Werror
+-CFLAGS_mutils.o := -Werror
+-CFLAGS_mmap.o := -Werror
+-CFLAGS_module.o := -Werror
+-CFLAGS_pdump.o := -Werror
+-CFLAGS_proc.o := -Werror
+-CFLAGS_pvr_bridge_k.o := -Werror
+-CFLAGS_pvr_debug.o := -Werror
+-CFLAGS_mm.o := -Werror
+-CFLAGS_mutex.o := -Werror
+-CFLAGS_event.o := -Werror
+-CFLAGS_osperproc.o := -Werror
+-CFLAGS_buffer_manager.o := -Werror
+-CFLAGS_devicemem.o := -Werror
+-CFLAGS_deviceclass.o := -Werror
+-CFLAGS_handle.o := -Werror
+-CFLAGS_hash.o := -Werror
+-CFLAGS_metrics.o := -Werror
+-CFLAGS_pvrsrv.o := -Werror
+-CFLAGS_queue.o := -Werror
+-CFLAGS_ra.o := -Werror
+-CFLAGS_resman.o := -Werror
+-CFLAGS_power.o := -Werror
+-CFLAGS_mem.o := -Werror
+-CFLAGS_pdump_common.o := -Werror
+-CFLAGS_bridged_support.o := -Werror
+-CFLAGS_bridged_pvr_bridge.o := -Werror
+-CFLAGS_perproc.o := -Werror
+-CFLAGS_lists.o := -Werror
+-CFLAGS_mem_debug.o := -Werror
+-CFLAGS_osfunc_common.o := -Werror
+-CFLAGS_refcount.o := -Werror
++CFLAGS_osfunc.o := 
++CFLAGS_mutils.o := 
++CFLAGS_mmap.o := 
++CFLAGS_module.o := 
++CFLAGS_pdump.o := 
++CFLAGS_proc.o := 
++CFLAGS_pvr_bridge_k.o := 
++CFLAGS_pvr_debug.o := 
++CFLAGS_mm.o := 
++CFLAGS_mutex.o := 
++CFLAGS_event.o := 
++CFLAGS_osperproc.o := 
++CFLAGS_buffer_manager.o := 
++CFLAGS_devicemem.o := 
++CFLAGS_deviceclass.o := 
++CFLAGS_handle.o := 
++CFLAGS_hash.o := 
++CFLAGS_metrics.o := 
++CFLAGS_pvrsrv.o := 
++CFLAGS_queue.o := 
++CFLAGS_ra.o := 
++CFLAGS_resman.o := 
++CFLAGS_power.o := 
++CFLAGS_mem.o := 
++CFLAGS_pdump_common.o := 
++CFLAGS_bridged_support.o := 
++CFLAGS_bridged_pvr_bridge.o := 
++CFLAGS_perproc.o := 
++CFLAGS_lists.o := 
++CFLAGS_mem_debug.o := 
++CFLAGS_osfunc_common.o := 
++CFLAGS_refcount.o := 
+ endif
+ 
+ # SUPPORT_SGX==1 only
+@@ -173,15 +173,15 @@ OBJS += \
+ 	services4/srvkm/devices/sgx/pb.o
+ 
+ ifneq ($(W),1)
+-CFLAGS_bridged_sgx_bridge.o := -Werror
+-CFLAGS_sgxinit.o := -Werror
+-CFLAGS_sgxpower.o := -Werror
+-CFLAGS_sgxreset.o := -Werror
+-CFLAGS_sgxutils.o := -Werror
+-CFLAGS_sgxkick.o := -Werror
+-CFLAGS_sgxtransfer.o := -Werror
+-CFLAGS_mmu.o := -Werror
+-CFLAGS_pb.o := -Werror
++CFLAGS_bridged_sgx_bridge.o := 
++CFLAGS_sgxinit.o := 
++CFLAGS_sgxpower.o := 
++CFLAGS_sgxreset.o := 
++CFLAGS_sgxutils.o := 
++CFLAGS_sgxkick.o := 
++CFLAGS_sgxtransfer.o := 
++CFLAGS_mmu.o := 
++CFLAGS_pb.o := 
+ endif
+ 
+ ifeq ($(SUPPORT_DRI_DRM),1)
+diff --git a/drivers/gpu/pvr/eurasia_km_linux/services4/srvkm/env/linux/Kbuild.mk b/drivers/gpu/pvr/eurasia_km_linux/services4/srvkm/env/linux/Kbuild.mk
+index dec96386..96882e59 100755
+--- a/drivers/gpu/pvr/eurasia_km_linux/services4/srvkm/env/linux/Kbuild.mk
++++ b/drivers/gpu/pvr/eurasia_km_linux/services4/srvkm/env/linux/Kbuild.mk
+@@ -106,38 +106,38 @@ pvrsrvkm-y += \
+ endif
+ 
+ ifneq ($(W),1)
+-CFLAGS_osfunc.o := -Werror
+-CFLAGS_mutils.o := -Werror
+-CFLAGS_mmap.o := -Werror
+-CFLAGS_module.o := -Werror
+-CFLAGS_pdump.o := -Werror
+-CFLAGS_proc.o := -Werror
+-CFLAGS_pvr_bridge_k.o := -Werror
+-CFLAGS_pvr_debug.o := -Werror
+-CFLAGS_mm.o := -Werror
+-CFLAGS_mutex.o := -Werror
+-CFLAGS_event.o := -Werror
+-CFLAGS_osperproc.o := -Werror
+-CFLAGS_buffer_manager.o := -Werror
+-CFLAGS_devicemem.o := -Werror
+-CFLAGS_deviceclass.o := -Werror
+-CFLAGS_handle.o := -Werror
+-CFLAGS_hash.o := -Werror
+-CFLAGS_metrics.o := -Werror
+-CFLAGS_pvrsrv.o := -Werror
+-CFLAGS_queue.o := -Werror
+-CFLAGS_ra.o := -Werror
+-CFLAGS_resman.o := -Werror
+-CFLAGS_power.o := -Werror
+-CFLAGS_mem.o := -Werror
+-CFLAGS_pdump_common.o := -Werror
+-CFLAGS_bridged_support.o := -Werror
+-CFLAGS_bridged_pvr_bridge.o := -Werror
+-CFLAGS_perproc.o := -Werror
+-CFLAGS_lists.o := -Werror
+-CFLAGS_mem_debug.o := -Werror
+-CFLAGS_osfunc_common.o := -Werror
+-CFLAGS_refcount.o := -Werror
++CFLAGS_osfunc.o := 
++CFLAGS_mutils.o := 
++CFLAGS_mmap.o := 
++CFLAGS_module.o := 
++CFLAGS_pdump.o := 
++CFLAGS_proc.o := 
++CFLAGS_pvr_bridge_k.o := 
++CFLAGS_pvr_debug.o := 
++CFLAGS_mm.o := 
++CFLAGS_mutex.o := 
++CFLAGS_event.o := 
++CFLAGS_osperproc.o := 
++CFLAGS_buffer_manager.o := 
++CFLAGS_devicemem.o := 
++CFLAGS_deviceclass.o := 
++CFLAGS_handle.o := 
++CFLAGS_hash.o := 
++CFLAGS_metrics.o := 
++CFLAGS_pvrsrv.o := 
++CFLAGS_queue.o := 
++CFLAGS_ra.o := 
++CFLAGS_resman.o := 
++CFLAGS_power.o := 
++CFLAGS_mem.o := 
++CFLAGS_pdump_common.o := 
++CFLAGS_bridged_support.o := 
++CFLAGS_bridged_pvr_bridge.o := 
++CFLAGS_perproc.o := 
++CFLAGS_lists.o := 
++CFLAGS_mem_debug.o := 
++CFLAGS_osfunc_common.o := 
++CFLAGS_refcount.o := 
+ endif
+ 
+ # SUPPORT_SGX==1 only
+@@ -154,15 +154,15 @@ pvrsrvkm-y += \
+ 	services4/srvkm/devices/sgx/pb.o
+ 
+ ifneq ($(W),1)
+-CFLAGS_bridged_sgx_bridge.o := -Werror
+-CFLAGS_sgxinit.o := -Werror
+-CFLAGS_sgxpower.o := -Werror
+-CFLAGS_sgxreset.o := -Werror
+-CFLAGS_sgxutils.o := -Werror
+-CFLAGS_sgxkick.o := -Werror
+-CFLAGS_sgxtransfer.o := -Werror
+-CFLAGS_mmu.o := -Werror
+-CFLAGS_pb.o := -Werror
++CFLAGS_bridged_sgx_bridge.o := 
++CFLAGS_sgxinit.o := 
++CFLAGS_sgxpower.o := 
++CFLAGS_sgxreset.o := 
++CFLAGS_sgxutils.o := 
++CFLAGS_sgxkick.o := 
++CFLAGS_sgxtransfer.o := 
++CFLAGS_mmu.o := 
++CFLAGS_pb.o := 
+ endif
+ 
+ ifeq ($(SUPPORT_DRI_DRM),1)
+diff --git a/drivers/net/wireless/actions/rtl8188etv/Makefile b/drivers/net/wireless/actions/rtl8188etv/Makefile
+index dad2193a..de126d08 100755
+--- a/drivers/net/wireless/actions/rtl8188etv/Makefile
++++ b/drivers/net/wireless/actions/rtl8188etv/Makefile
+@@ -14,7 +14,7 @@ EXTRA_CFLAGS += -O1
+ #EXTRA_CFLAGS += -O3
+ #EXTRA_CFLAGS += -Wall
+ #EXTRA_CFLAGS += -Wextra
+-#EXTRA_CFLAGS += -Werror
++#EXTRA_CFLAGS += 
+ #EXTRA_CFLAGS += -pedantic
+ #EXTRA_CFLAGS += -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
+ 
+diff --git a/drivers/net/wireless/actions/rtl8723bs/Makefile b/drivers/net/wireless/actions/rtl8723bs/Makefile
+index 336b419d..b2162f87 100755
+--- a/drivers/net/wireless/actions/rtl8723bs/Makefile
++++ b/drivers/net/wireless/actions/rtl8723bs/Makefile
+@@ -3,7 +3,7 @@ EXTRA_CFLAGS += -O1
+ #EXTRA_CFLAGS += -O3
+ #EXTRA_CFLAGS += -Wall
+ #EXTRA_CFLAGS += -Wextra
+-#EXTRA_CFLAGS += -Werror
++#EXTRA_CFLAGS += 
+ #EXTRA_CFLAGS += -pedantic
+ #EXTRA_CFLAGS += -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
+ 
+diff --git a/drivers/net/wireless/actions/rtl8723bs_vq0/Makefile b/drivers/net/wireless/actions/rtl8723bs_vq0/Makefile
+index 0b8279ac..405f97af 100755
+--- a/drivers/net/wireless/actions/rtl8723bs_vq0/Makefile
++++ b/drivers/net/wireless/actions/rtl8723bs_vq0/Makefile
+@@ -3,7 +3,7 @@ EXTRA_CFLAGS += -O1
+ #EXTRA_CFLAGS += -O3
+ #EXTRA_CFLAGS += -Wall
+ #EXTRA_CFLAGS += -Wextra
+-#EXTRA_CFLAGS += -Werror
++#EXTRA_CFLAGS += 
+ #EXTRA_CFLAGS += -pedantic
+ #EXTRA_CFLAGS += -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
+ 
+diff --git a/drivers/net/wireless/actions/rtl8723bu/Makefile b/drivers/net/wireless/actions/rtl8723bu/Makefile
+index 02d2e678..b7889071 100755
+--- a/drivers/net/wireless/actions/rtl8723bu/Makefile
++++ b/drivers/net/wireless/actions/rtl8723bu/Makefile
+@@ -3,7 +3,7 @@ EXTRA_CFLAGS += -O1
+ #EXTRA_CFLAGS += -O3
+ #EXTRA_CFLAGS += -Wall
+ #EXTRA_CFLAGS += -Wextra
+-#EXTRA_CFLAGS += -Werror
++#EXTRA_CFLAGS += 
+ #EXTRA_CFLAGS += -pedantic
+ #EXTRA_CFLAGS += -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
+ 

@@ -49,6 +49,8 @@ BR2_arm=y
 BR2_cortex_a9=y
 BR2_ARM_ENABLE_NEON=y
 BR2_ARM_ENABLE_VFP=y
+# NEON com a FPU per defecte (Koriki ho feia: millora PCSX ReARMed i altres cores)
+BR2_ARM_FPU_NEON=y
 
 BR2_GLOBAL_PATCH_DIR="board/actions/atm7039/rg35xx/patches"
 # Linux headers same as kernel, a 3.10 series
@@ -71,6 +73,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="rg35xx_atm7039"
 BR2_LINUX_KERNEL_UIMAGE=y
 BR2_LINUX_KERNEL_DTS_SUPPORT=y
 BR2_LINUX_KERNEL_INTREE_DTS_NAME="rg35xx_atm7039"
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(BR2_EXTERNAL_KNULLI_PATH)/board/actions/atm7039/rg35xx/linux-defconfig-fragment.config"
 
 BR2_PACKAGE_UTIL_LINUX=y
 BR2_PACKAGE_UTIL_LINUX_LIBS=y
