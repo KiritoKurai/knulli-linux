@@ -1,0 +1,51 @@
+name: rg35xx-build
+
+# Compila la imatge de l'RG35XX original (target atm7039) en un servidor
+# propi (self-hosted runner amb l'etiqueta rg35xx-builder; vegeu
+# scripts/rg35xx-runner-setup.sh). Es llança fent push a la branca
+# build-rg35xx o des de la pestanya Actions.
+on:
+  push:
+    branches: [build-rg35xx]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rg35xx-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: [self-hosted, rg35xx-builder]
+    timeout-minutes: 1440
+    env:
+      WORK_ROOT: /srv/knulli
+    steps:
+      - name: Codi font (persistent, per reaprofitar compilacions)
+        run: |
+          set -euo pipefail
+          SRC="$WORK_ROOT/src"
+          if [ ! -d "$SRC/.git" ]; then
+            git clone -q "https://github.com/$GITHUB_REPOSITORY.git" "$SRC"
+          fi
+          cd "$SRC"
+          git fetch -q origin "$GITHUB_SHA"
+          git checkout -q -f "$GITHUB_SHA"
+          git submodule sync -q
+          git submodule update -q --init --recursive --depth 1
+
+      - name: Compilació
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash "$WORK_ROOT/src/scripts/rg35xx-ci-build.sh"
+
+      - name: Imatge
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: knulli-rg35xx-${{ github.sha }}
+          path: /srv/knulli/output/atm7039/images/knulli/images/rg35xx/*.img.gz
+          compression-level: 0
+          retention-days: 14
